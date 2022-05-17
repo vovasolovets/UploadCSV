@@ -14,6 +14,7 @@ class DataSetSerializer(serializers.ModelSerializer):
             jsonschema.validate(value, DATASET_SCHEMA)
         except jsonschema.ValidationError:
             raise serializers.ValidationError('Schema not valid')
+        return value
 
 
 class GeneratorSerializer(serializers.Serializer):
