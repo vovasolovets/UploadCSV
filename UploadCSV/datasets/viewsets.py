@@ -11,18 +11,25 @@ from .tasks import generate_file
 
 
 class DataSetViewSet(viewsets.ModelViewSet):
-    serializer_class = DataSetSerializer
+    default_serializer_class = DataSetSerializer
     queryset = DataSet.objects.all()
     permission_classes = [permissions.IsAuthenticated]
+    serializers = {
+        'generate-file': GeneratorSerializer
+    }
 
-    @action(detail=True, methods=('post',), url_path='generate-file')
+    def get_serializer_class(self):
+        return self.serializers.get(self.action,
+                                    self.default_serializer_class)
+
+    @action(detail=True, methods=('get', 'post'), url_path='generate-file')
     def generate_file(self, request, pk=None, *args, **kwargs):
         fake = Faker()
         data_set = self.get_object()
-        generator = GeneratorSerializer(request.POST or None)
+        generator = GeneratorSerializer(data=request.POST or None)
         if generator.is_valid():
             example = DataSetExample.objects.create(data_set=data_set, file=fake.file_name(extension='csv'))
-            generate_file.delay(example, generator.validated_data.get('row_number'))
+            generate_file.delay(example_pk=example.pk, n=generator.validated_data.get('row_number'))
             return Response('Your request is being processed')
         else:
             return Response(generator.errors,

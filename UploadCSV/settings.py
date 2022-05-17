@@ -132,4 +132,8 @@ CELERY_ALWAYS_EAGER = False if CELERY_BROKER_URL else True
 CELERY_ACCEPT_CONTENT = ['pickle']
 CELERY_TASK_SERIALIZER = 'pickle'
 CELERY_RESULT_SERIALIZER = 'pickle'
-CELERY_RESULT_BACKEND = 'django-db'
+
+PROJECT_ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), '.'))
+
+
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
