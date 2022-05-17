@@ -3,6 +3,7 @@ from rest_framework import permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.http import FileResponse
+from django.shortcuts import render, get_object_or_404
 from .serializers import DataSetSerializer, GeneratorSerializer, DataSetExampleSerializer
 from .models import DataSet, DataSetExample
 from . import ProcessingStatus
@@ -41,9 +42,21 @@ class DataSetExampleViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = DataSetExample.objects.all()
     permission_classes = [permissions.IsAuthenticated]
 
+    def list(self, request, client_pk=None, maildrop_pk=None):
+        queryset = DataSetExample.objects.filter(mail_drop__client=client_pk, mail_drop=maildrop_pk)
+        serializer = DataSetExampleSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None, data_set_pk=None):
+        queryset = DataSetExample.objects.filter(pk=pk, data_set__pk=data_set_pk)
+        example = get_object_or_404(queryset, pk=pk)
+        serializer = DataSetExampleSerializer(example)
+        return Response(serializer.data)
+
     @action(detail=True, methods=('get',), url_path='download-file')
-    def download(self, request, pk=None, *args, **kwargs):
-        example = self.get_object()
+    def download(self, request, pk=None,data_set_pk=None,  *args, **kwargs):
+        queryset = DataSetExample.objects.filter(pk=pk, data_set__pk=data_set_pk)
+        example = get_object_or_404(queryset, pk=pk)
         if example.process_status == ProcessingStatus.READY:
             file_handle = example.file.open()
 
