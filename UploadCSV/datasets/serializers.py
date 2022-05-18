@@ -14,9 +14,14 @@ class DataSetExampleSerializer(serializers.ModelSerializer):
         'data_set_pk': 'data_set__pk',
     }
 
+    link = serializers.SerializerMethodField(method_name='get_link')
+
+    def get_link(self, obj):
+        return '/upload/datasets/%i/examples/%i/download-file' % (obj.data_set.id, obj.id)
+
     class Meta:
         model = DataSetExample
-        fields = ['file', 'process_status']
+        fields = ['file', 'process_status', 'link']
 
 
 class DataSetSerializer(serializers.ModelSerializer):
