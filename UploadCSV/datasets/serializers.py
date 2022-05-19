@@ -24,12 +24,28 @@ class DataSetExampleSerializer(serializers.ModelSerializer):
         fields = ['file', 'process_status', 'link']
 
 
+class JsonSchemaSerializer(serializers.Serializer):
+    name = serializers.CharField(required=True)
+    data_type = serializers.ChoiceField(choices=[
+        ('full_name', 'Full Name'),
+        ('email', 'Email'),
+        ('domain_name', 'Domain Name'),
+        ('phone_number', 'Phone Number'),
+        ('company_name', 'Company Name'),
+        ('address', 'Address'),
+        ('date', 'Date')], required=True)
+    order = serializers.IntegerField(required=True)
+
+
 class DataSetSerializer(serializers.ModelSerializer):
     datasetexample_set = DataSetExampleSerializer(many=True, read_only=True)
+    # json_schema = JsonSchemaSerializer(many=True)
+
 
     class Meta:
         model = DataSet
         fields = ['name', 'json_schema', 'datasetexample_set']
+        widgets = {}
 
     def validate_json_schema(self, value):
         try:

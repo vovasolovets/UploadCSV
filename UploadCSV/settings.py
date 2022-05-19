@@ -135,5 +135,18 @@ CELERY_RESULT_SERIALIZER = 'pickle'
 
 PROJECT_ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), '.'))
 
+STATIC_URL = '/static/'
+# this is the static files folder name which you created in django project root folder. This is different from above STATIC_URL.
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'statics'),
+]
+
 
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ]
+}

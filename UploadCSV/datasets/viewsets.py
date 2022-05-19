@@ -2,11 +2,12 @@ from rest_framework import status, viewsets
 from rest_framework import permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.parsers import FormParser, MultiPartParser
 from django.http import FileResponse
 from django.shortcuts import render, get_object_or_404
 from .serializers import DataSetSerializer, GeneratorSerializer, DataSetExampleSerializer
 from .models import DataSet, DataSetExample
-from . import ProcessingStatus
+from . import ProcessingStatus, DATASET_SCHEMA
 from faker import Faker
 from .tasks import generate_file
 
@@ -15,6 +16,7 @@ class DataSetViewSet(viewsets.ModelViewSet):
     default_serializer_class = DataSetSerializer
     queryset = DataSet.objects.all()
     permission_classes = [permissions.IsAuthenticated]
+    parser_classes = (FormParser,)
     serializers = {
         'generate-file': GeneratorSerializer
     }
@@ -35,6 +37,10 @@ class DataSetViewSet(viewsets.ModelViewSet):
         else:
             return Response(generator.errors,
                             status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=('get'), url_path='get-schema')
+    def get_schema(self):
+        return Response(DATASET_SCHEMA)
 
 
 class DataSetExampleViewSet(viewsets.ReadOnlyModelViewSet):
