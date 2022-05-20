@@ -1,5 +1,5 @@
-from ..celeryconf import app as main_app
-from .models import DataSet, DataSetExample
+from UploadCSV.celeryconfig import celery as main_app
+from .models import DataSetExample
 from . import FIELD_DICT, ProcessingStatus
 from faker import Faker
 import os
