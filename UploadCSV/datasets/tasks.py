@@ -11,7 +11,7 @@ def generate_data_type(faker, data_type):
 
 
 @main_app.task
-def generate_file(self, example_pk, n):
+def generate_file(example_pk, n):
     example = DataSetExample.objects.filter(pk=example_pk).first()
     dataset = example.data_set
     faker = Faker()

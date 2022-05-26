@@ -29,7 +29,7 @@ class DataSetViewSet(viewsets.ModelViewSet):
     def generate_file(self, request, pk=None, *args, **kwargs):
         fake = Faker()
         data_set = self.get_object()
-        generator = GeneratorSerializer(data=request.POST or None)
+        generator = GeneratorSerializer(data=request.data or None)
         if generator.is_valid():
             example = DataSetExample.objects.create(data_set=data_set, file=fake.file_name(extension='csv'))
             generate_file.delay(example_pk=example.pk, n=generator.validated_data.get('row_number'))

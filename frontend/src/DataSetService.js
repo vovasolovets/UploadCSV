@@ -52,6 +52,7 @@ export default class DataSetsService{
 	}
 	uploadRowNumbers(id, dataset){
 		const url = `/upload/datasets/${id}/generate-file`;
-		return axiosInstance.post(url, dataset)
+		console.log(JSON.stringify(dataset));
+		return axiosInstance.post(url, JSON.stringify(dataset))
 	}
 }
