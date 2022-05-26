@@ -15,13 +15,17 @@ class DataSetExampleSerializer(serializers.ModelSerializer):
     }
 
     link = serializers.SerializerMethodField(method_name='get_link')
+    file_name = serializers.SerializerMethodField(method_name='get_file_name')
 
     def get_link(self, obj):
         return '/upload/datasets/%i/examples/%i/download-file' % (obj.data_set.id, obj.id)
 
+    def get_file_name(self, obj):
+        return obj.file.name
+
     class Meta:
         model = DataSetExample
-        fields = ['file', 'process_status', 'link']
+        fields = ['file', 'process_status', 'link', 'file_name']
 
 
 class JsonSchemaSerializer(serializers.Serializer):
@@ -44,7 +48,7 @@ class DataSetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DataSet
-        fields = ['name', 'json_schema', 'datasetexample_set']
+        fields = ['name', 'json_schema', 'datasetexample_set', 'id']
         widgets = {}
 
     def validate_json_schema(self, value):

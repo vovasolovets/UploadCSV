@@ -20,8 +20,8 @@ from .datasets.urls import router, examples_router
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path(r'^login/$', auth_views.LoginView.as_view(), name='login'),
-    path(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
+    path(r'login/', auth_views.LoginView.as_view(), name='login'),
+    path(r'logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('upload/', include(router.urls)),
     path('upload/', include(examples_router.urls))
 ]

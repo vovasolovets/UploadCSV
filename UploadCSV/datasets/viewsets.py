@@ -16,7 +16,7 @@ class DataSetViewSet(viewsets.ModelViewSet):
     default_serializer_class = DataSetSerializer
     queryset = DataSet.objects.all()
     permission_classes = [permissions.IsAuthenticated]
-    parser_classes = (FormParser,)
+    # parser_classes = (FormParser,)
     serializers = {
         'generate-file': GeneratorSerializer
     }
@@ -38,8 +38,8 @@ class DataSetViewSet(viewsets.ModelViewSet):
             return Response(generator.errors,
                             status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=False, methods=('get'), url_path='get-schema')
-    def get_schema(self):
+    @action(detail=False, methods=('get', ), url_path='get-schema')
+    def get_schema(self, request):
         return Response(DATASET_SCHEMA)
 
 

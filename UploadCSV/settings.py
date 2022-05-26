@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'UploadCSV.datasets',
     'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders',
+    'dj_rest_auth',
 ]
 
 MIDDLEWARE = [
@@ -50,6 +53,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'UploadCSV.urls'
@@ -147,8 +152,37 @@ django_heroku.settings(locals())
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 
 REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    ]
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    ),
 }
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+
+from corsheaders.defaults import default_headers
+
+CORS_ALLOW_HEADERS = default_headers + (
+    'Access-Control-Allow-Origin',
+    'Access-Control-Allow-Credentials',
+    'X-CSRFTOKEN',
+    'X-Requested-With'
+)
+ALLOWED_HOSTS = ['localhost']
+
+CORS_ALLOW_CREDENTIALS = True
+
+SESSION_COOKIE_HTTPONLY = True
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000',
+    # '127.0.0.1:3000',
+)
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000'
+]
