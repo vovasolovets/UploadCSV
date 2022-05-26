@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Form from "@rjsf/core";
 import DataSetsService from './DataSetService';
+import {useParams } from 'react-router-dom';
 
 const dataSetsService = new DataSetsService();
 
@@ -14,42 +15,28 @@ const schema = {
   }
 };
 
-class DataSetGenerateFile extends Component {
-    constructor(props) {
-        super(props);
-      }
-
-      componentDidMount(){
-        const params = this.props;
-        if(params && params.id)
-        {
-
-        }
-      }
-
-      handleUpdate(id, formData){
+const handleUpdate = (id, formData) =>{
         dataSetsService.uploadRowNumbers(id, formData
         ).then((result)=>{
           alert("DataSet updated!");
         }).catch(()=>{
           alert('There was an error! Please re-check your form.');
         });
-      }
-      handleSubmitData(formData) {
-        const params = this.props;
-        console.log(params);
-
-        if(params && params.id){
-          this.handleUpdate(params.id, formData);
+      };
+const handleSubmitData = (id, formData) => {
+        console.log(formData);
+        console.log(id);
+        if(id){
+          handleUpdate(id, formData);
         }
-      }
+      };
 
-      render(){
+const DataSetGenerateFile = () => {
+        let { id } = useParams();
         return (<Form schema={schema}
                 onSubmit={({formData}) => {
-                this.handleSubmitData(formData)}
+                handleSubmitData(id, formData)}
                 }/>)
-      }
-}
+};
 
 export default DataSetGenerateFile;

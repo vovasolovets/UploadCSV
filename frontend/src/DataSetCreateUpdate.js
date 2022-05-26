@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Form from "@rjsf/core";
 import DataSetsService from './DataSetService';
+import {useParams} from "react-router-dom";
 
 const dataSetsService = new DataSetsService();
 
@@ -34,23 +35,7 @@ const schema = {
   }
 };
 
-class DataSetCreateUpdate extends Component {
-    constructor(props) {
-        super(props);
-      }
-
-      componentDidMount(){
-        const params = this.props;
-        if(params && params.id)
-        {
-          dataSetsService.getDataSet(params.id).then((c)=>{
-            this.refs.name.value = c.name;
-            this.refs.json_schema.value = c.json_schema;
-          })
-        }
-      }
-
-      handleCreate(formData){
+const handleCreate = (formData) =>{
         dataSetsService.createDataSet(formData
         ).then((result)=>{
           console.log(result);
@@ -58,34 +43,35 @@ class DataSetCreateUpdate extends Component {
         }).catch(()=>{
           alert('There was an error! Please re-check your form.');
         });
-      }
-      handleUpdate(id, formData){
+      };
+
+const handleUpdate = (id, formData)=> {
         dataSetsService.updateDataSet(id, formData
         ).then((result)=>{
           alert("DataSet updated!");
         }).catch(()=>{
           alert('There was an error! Please re-check your form.');
         });
-      }
-      handleSubmitData(formData) {
-        const params = this.props;
+      };
 
-        if(params && params.id){
-          this.handleUpdate(params.id, formData);
+const handleSubmitData = (id, formData) => {
+
+        if(!!id){
+          handleUpdate(id, formData);
         }
         else
         {
-          this.handleCreate(formData);
+          handleCreate(formData);
         }
 
-      }
+      };
 
-      render(){
-        return (<Form schema={schema}
+const DataSetCreateUpdate = () => {
+      let {id} = useParams();
+      return (<Form schema={schema}
                 onSubmit={({formData}) => {
-                this.handleSubmitData(formData)}
+                handleSubmitData(id, formData)}
                 }/>)
-      }
-}
+};
 
 export default DataSetCreateUpdate;
