@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 import jsonschema
 from .models import DataSet, DataSetExample
 from . import DATASET_SCHEMA
