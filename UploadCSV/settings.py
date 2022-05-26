@@ -173,7 +173,7 @@ CORS_ALLOW_HEADERS = default_headers + (
     'X-CSRFTOKEN',
     'X-Requested-With'
 )
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1:8000']
 
 CORS_ALLOW_CREDENTIALS = True
 
