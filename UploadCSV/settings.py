@@ -185,10 +185,10 @@ CORS_ALLOW_CREDENTIALS = True
 SESSION_COOKIE_HTTPONLY = True
 
 CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000',
+    'http://localhost:3000','uploadcsv.herokuapp.com'
     # '127.0.0.1:3000',
 )
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:3000'
+    'http://localhost:3000', 'uploadcsv.herokuapp.com'
 ]
 
